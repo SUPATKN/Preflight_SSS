@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [file, setFile] = useState(null);
-  const [images, setImages] = useState([]);
+  const [photo, setPhoto] = useState([]);
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -19,15 +19,11 @@ export default function Home() {
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log(response.data);
       alert("File uploaded successfully!");
       fetchImages(); // Fetch images after successful upload
@@ -39,8 +35,8 @@ export default function Home() {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/images");
-      setImages(response.data);
+      const response = await axios.get("/api/images");
+      setPhoto(response.data);
     } catch (error) {
       console.error("Error fetching images:", error);
     }
@@ -49,7 +45,7 @@ export default function Home() {
   useEffect(() => {
     fetchImages();
   }, []);
-
+  console.log({ photo });
   return (
     <div>
       <h2>Upload File</h2>
@@ -57,7 +53,7 @@ export default function Home() {
       <button onClick={handleUpload}>Upload</button>
       <div>
         <h3>Uploaded Images</h3>
-        {images.map((image: any) => (
+        {photo.map((image: any) => (
           <div key={image.id}>
             <img
               crossOrigin="anonymous"

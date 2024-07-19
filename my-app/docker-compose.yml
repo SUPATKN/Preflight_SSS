@@ -13,23 +13,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - pf-net
-
-
-  backend:
-    container_name: pf-backend
-    build: .
-    ports:
-      - ${PORT}:3000
-    networks:
-      - preflight_pf-net
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_APP_USER=${POSTGRES_APP_USER}
-      - POSTGRES_APP_PASSWORD=${POSTGRES_APP_PASSWORD}
-
-      
 volumes:
   pf-data:
 networks:
