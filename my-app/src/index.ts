@@ -26,7 +26,7 @@ app.use(
 
 const upload = multer({ storage });
 
-app.use("/images", express.static(path.join(__dirname, "../images")));
+app.use("/api/images", express.static(path.join(__dirname, "../images")));
 
 app.get("/", (req: any, res: any) => {
   res.send("Hello World");
@@ -46,7 +46,7 @@ app.post("/api/upload", upload.single("image"), async (req: any, res: any) => {
   }
 });
 const port = process.env.PORT || 3000;
-app.get("/api/images", async (req: any, res: any) => {
+app.get("/api/photo", async (req: any, res: any) => {
   try {
     const result = await dbClient.query.images.findMany();
     res.json(result);

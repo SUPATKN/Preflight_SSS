@@ -35,8 +35,9 @@ export default function Home() {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get("/api/images");
+      const response = await axios.get("/api/photo");
       setPhoto(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching images:", error);
     }
@@ -53,12 +54,12 @@ export default function Home() {
       <button onClick={handleUpload}>Upload</button>
       <div>
         <h3>Uploaded Images</h3>
-        {photo.map((image: any) => (
-          <div key={image.id}>
+        {photo.map((photo: any) => (
+          <div key={photo.id}>
             <img
               crossOrigin="anonymous"
-              src={`http://localhost:3000${image.path}`}
-              alt={`Image ${image.id}`}
+              src={`/api/${photo.path}`}
+              alt={`Image ${photo.id}`}
               width="200"
             />
           </div>
