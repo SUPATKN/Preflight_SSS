@@ -2,7 +2,7 @@ name: img-upload
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: pf-db-img
+    container_name: pf-img-db
     ports:
       - 5432:${POSTGRES_PORT}
     volumes:

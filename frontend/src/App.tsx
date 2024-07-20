@@ -33,6 +33,17 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (filename: any) => {
+    try {
+      await axios.delete(`/api/photo/${filename}`);
+      alert("File deleted successfully!");
+      fetchImages(); // Fetch images after successful deletion
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      alert("Failed to delete file.");
+    }
+  };
+
   const fetchImages = async () => {
     try {
       const response = await axios.get("/api/photo");
@@ -59,9 +70,12 @@ export default function Home() {
             <img
               crossOrigin="anonymous"
               src={`/api/${photo.path}`}
-              alt={`Image ${photo.id}`}
+              // alt={`Image ${photo.id}`}
               width="200"
             />
+            <button onClick={() => handleDelete(photo.path.split("/").pop())}>
+              Delete
+            </button>
           </div>
         ))}
       </div>

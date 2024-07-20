@@ -1,11 +1,14 @@
 const express = require("express");
+const fs = require('fs');
 const app = express();
 const multer = require("multer");
 const path = require("path");
 import cors from "cors";
 import helmet from "helmet";
-import { dbClient } from "@db/client";
+import { dbClient ,dbConn} from "@db/client";
 import { images } from "@db/schema";
+import { eq } from "drizzle-orm";
+
 
 const storage = multer.diskStorage({
   destination: function (req: any, file: any, cb: any) {
@@ -52,6 +55,27 @@ app.get("/api/photo", async (req: any, res: any) => {
     res.json(result);
   } catch (error) {
     console.error("Error retrieving images from the database:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.delete('/api/photo/:filename', async (req:any, res:any) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../images', filename);
+  const results = await dbClient.query.images.findMany();
+  if (results.length === 0) dbConn.end();
+
+  try {
+    // ลบไฟล์จาก directory
+    fs.unlinkSync(filePath);
+    
+    // ลบ path ของไฟล์จากฐานข้อมูล
+    const id = results[0].id;
+    await dbClient.delete(images).where(eq(images.id, id));
+
+    res.json({ message: 'File deleted successfully' });
+  } catch (error) {
+    console.error("Error deleting file:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
