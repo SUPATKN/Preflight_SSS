@@ -7,7 +7,7 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/gallery">
+        <Navbar.Brand as={Link} to="/">
           <img src={Logo} alt="My Photo App Logo" style={{ height: "40px" }} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -16,7 +16,7 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/upload">
               Upload
             </Nav.Link>
-            <Nav.Link as={Link} to="/gallery">
+            <Nav.Link as={Link} to="/">
               Gallery
             </Nav.Link>
           </Nav>

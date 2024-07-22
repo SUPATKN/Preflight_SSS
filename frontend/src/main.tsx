@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/" element={<Gallery />} />
         <Route path="/upload" element={<App />} />
       </Routes>
     </Router>
