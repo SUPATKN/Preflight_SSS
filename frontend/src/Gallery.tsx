@@ -1,6 +1,11 @@
 // src/Gallery.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+import { Image, Row, Col } from "react-bootstrap";
+import Layout from "./Layout";
+>>>>>>> 838fd7f113493df8620f17cab2e22852b5429009
 
 const Gallery = () => {
   const [photos, setPhotos] = useState<{ id: string; path: string }[]>([]);
