@@ -1,0 +1,11 @@
+.Button1:hover {
+    background-color: #008CBA;
+    color: white;
+    transition-duration: 0.1s;
+    border-radius: 25px;
+    
+  }
+  .Button1 {
+    border-radius: 25px;
+    font-size: 15px;
+  }

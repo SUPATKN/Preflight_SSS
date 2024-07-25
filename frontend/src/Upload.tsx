@@ -1,4 +1,3 @@
-// src/App.tsx
 import { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
 import { Form, Button, Image, Row, Col, Alert } from "react-bootstrap";
@@ -35,10 +34,12 @@ const Upload = () => {
         },
       });
       setSuccess("File uploaded successfully!");
+      setError(null);
       fetchImages(); // Fetch images after successful upload
       setSelectedImage(""); // Clear the preview after upload
     } catch (error) {
       console.error("Error uploading file:", error);
+      setSuccess(null);
       setError("Failed to upload file.");
     }
   };
@@ -59,9 +60,15 @@ const Upload = () => {
     try {
       await axios.delete(`/api/photo/${filename}`);
       setSuccess("File deleted successfully!");
-      fetchImages(); // Fetch images after successful deletion
+      setError(null);
+
+      const updatedPhotos = photos.filter(
+        (photo) => photo.path.split("/").pop() !== filename
+      );
+      setPhotos(updatedPhotos);
     } catch (error) {
       console.error("Error deleting file:", error);
+      setSuccess(null);
       setError("Failed to delete file.");
     }
   };

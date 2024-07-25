@@ -1,5 +1,5 @@
 const express = require("express");
-const fs = require('fs');
+const fs = require("fs");
 const app = express();
 const multer = require("multer");
 const path = require("path");
@@ -8,12 +8,14 @@ import helmet from "helmet";
 import { dbClient, dbConn } from "@db/client";
 import { images } from "@db/schema";
 import { eq } from "drizzle-orm";
+import moment from "moment";
 
 const storage = multer.diskStorage({
   destination: function (req: any, file: any, cb: any) {
     cb(null, path.join(__dirname, "../images"));
   },
   filename: function (req: any, file: any, cb: any) {
+
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
     const originalName = file.originalname.replace(/\s+/g, '_');
     const newFilename = `${timestamp}-${originalName}`;
@@ -21,7 +23,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// Middleware
+//Middleware
 app.use(helmet());
 app.use(
   cors({
@@ -38,8 +40,7 @@ app.get("/", (req: any, res: any) => {
 });
 
 app.post("/api/upload", upload.single("image"), async (req: any, res: any) => {
-  const filePath = `/images/${req.file.filename}`;
-  try {
+const filePath = `/images/${req.file.filename}`;  try {
     const result = await dbClient
       .insert(images)
       .values({ path: filePath })
@@ -50,9 +51,7 @@ app.post("/api/upload", upload.single("image"), async (req: any, res: any) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 const port = process.env.PORT || 3000;
-
 app.get("/api/photo", async (req: any, res: any) => {
   try {
     const result = await dbClient.query.images.findMany();
@@ -63,25 +62,26 @@ app.get("/api/photo", async (req: any, res: any) => {
   }
 });
 
-app.delete('/api/photo/:filename', async (req: any, res: any) => {
+app.delete("/api/photo/:filename", async (req: any, res: any) => {
   const filename = req.params.filename;
-  const filePath = path.join(__dirname, '../images', filename);
+  const filePath = path.join(__dirname, "../images", filename);
+  
+
   try {
     // ลบไฟล์จาก directory
     fs.unlinkSync(filePath);
-
-    // ลบ path ของไฟล์จากฐานข้อมูล
-    const results = await dbClient.query.images.findMany();
+        const results = await dbClient.query.images.findMany();
     if (results.length === 0) {
       dbConn.end();
       res.status(404).json({ message: 'File not found in database' });
       return;
     }
 
+    // ลบ path ของไฟล์จากฐานข้อมูล
     const id = results[0].id;
     await dbClient.delete(images).where(eq(images.id, id));
 
-    res.json({ message: 'File deleted successfully' });
+    res.json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Error deleting file:", error);
     res.status(500).json({ error: "Internal Server Error" });
